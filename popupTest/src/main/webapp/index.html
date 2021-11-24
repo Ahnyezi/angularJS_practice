@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial=scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-cookies.js"></script>
+<script>
+	var app = angular.module("test_app",["ngCookies"])
+	
+	app.controller("testController", function($scope, $cookies, $window){
+
+		// 페이지 로드 이후 호출될 함수
+		$scope.load = function(){
+			var ignorePwdExpirePopup = $cookies.get("ignorePwdExpirePopup");
+			console.log('팝업창 무시 cookie :' + ignorePwdExpirePopup);
+			if (ignorePwdExpirePopup === undefined){
+				// '팝업창 무시' cookie값이 undefined인 경우 창 출력
+				$window.open("PwdExpirePopup.html", "popup", "top=500,left=500,width=500,height=230");
+			}
+		};
+		
+	})
+</script>
+</head>
+<body>
+
+<div ng-app="test_app" ng-controller="testController" ng-init="load()">
+	<h2>로그인 후 보여질 메인페이지</h2>
+</div>
+
+</body>
+</html>

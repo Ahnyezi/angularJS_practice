@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial=scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-cookies.js"></script>
+<script>
+	var app = angular.module("test_popup", ['ngCookies'])
+	
+	app.controller("testPopupController", function($scope, $window, $cookies){
+		$scope.daysLeft = 7;					// 비밀번호 만료까지 남은기간 임의로 세팅
+		
+		$scope.moveToChangePwd = function(pwdChangeFlag){
+			if(pwdChangeFlag){
+				$window.close();
+				
+				// 비밀번호 변경 로직...
+			}
+			
+		};  // 비밀번호 재설정시 호출될 함수
+		
+		$scope.ignorePopup = function(){
+			$window.close();
+			
+			// cookie 지속 시간 설정
+			var today = new Date();
+            var expiresValue = new Date(today);
+            expiresValue.setMinutes(today.getMinutes() + 1); // 1분
+//            expiresValue.setMinutes(today.getMinutes() + 1440); // 24시간
+
+			// cookie 세팅
+            $cookies.put('ignorePwdExpirePopup', true, {'expires': expiresValue});	
+
+		};      // 하루동안 보지않기 클릭시 호출될 함수		
+	})
+</script>
+</head>
+<body>
+
+<div ng-app="test_popup" ng-controller="testPopupController">
+	<form name="form">
+        <dl>
+            <dt>비밀번호 만료까지 <span style="color:red">{{daysLeft}}</span>일 남았습니다.</dt>
+        </dl>
+        <div>
+            <table cellpadding="0" cellspacing="0" border="1" summary="">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div>
+	                            <button ng-click="moveToChangePwd(true)" style="color:white;background-color:blue">비밀번호<br>재설정</button>
+                            </div>                            
+                        </td>
+                        <td>
+                            <div>
+                                <button ng-click="ignorePopup()" style="color:white;background-color:grey">오늘 하루동안<br>보지 않기</button>
+                            </div>                            
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
